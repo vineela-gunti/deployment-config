@@ -1,0 +1,69 @@
+---
+- name: Busybox Deployment
+  k8s:
+    definition:
+      kind: "DeploymentConfig"
+      apiVersion: "apps.openshift.io/v1"
+      metadata:
+        name: "busybox"
+        labels:
+          app: "busybox"
+      spec:
+        template: 
+          metadata:
+            labels:
+              name: "busybox"
+              app: "busybox"
+          spec:
+            containers:
+              - name: "busybox"
+                image: "{{image}}"
+                command:
+                  - sleep
+                  - "3600"
+                ports:
+                  - containerPort: 8080
+                    protocol: "TCP"
+                volumeMounts:
+                - name: busybox-data
+                  mountPath: "/var/lib/busyboxdata/data"
+            volumes:
+            - name: busybox-data
+              persistentVolumeClaim:
+                claimName: busybox-pvc-vol      
+        replicas: "{{size}}" 
+        triggers:
+          - type: "ConfigChange" 
+          - type: "ImageChange" 
+            imageChangeParams:
+              automatic: true
+              containerNames:
+                - "busybox"
+                    from:
+                kind: "ImageStreamTag"
+                name: "busybox:1.31.1"
+        strategy: 
+          type: "Rolling"
+        paused: false 
+        revisionHistoryLimit: 2 
+        minReadySeconds: 0
+- name: Create the  service
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: busybox-service
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: busybox
+      spec:
+        ports:
+        - name: database
+          port: 8080
+          protocol: TCP
+          targetPort: 8080
+        selector:
+          app: busybox        
+        
+        
