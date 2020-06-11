@@ -40,8 +40,8 @@
               containerNames:
                 - "busybox"
                     from:
-                kind: "ImageStreamTag"
-                name: "busybox:1.31.1"
+                      kind: "ImageStreamTag"
+                      name: "busybox:1.31.1"
         strategy: 
           type: "Rolling"
         paused: false 
