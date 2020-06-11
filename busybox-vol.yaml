@@ -1,0 +1,33 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: busybox-pv-vol
+  namespace: bb
+  labels:
+    type: local
+    app: busybox
+spec:
+  storageClassName: local-storage
+  capacity:
+     storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: busybox-pvc-vol
+  namespace: bb
+  labels:
+    type: local
+    app: busybox
+spec:
+  storageClassName: local-storage
+  resources:
+    requests:
+      storage: 1Gi
+  accessModes:
+    - ReadWriteMany
