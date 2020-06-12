@@ -6,6 +6,7 @@
       apiVersion: "apps.openshift.io/v1"
       metadata:
         name: "busybox"
+        namespace: "bb"
         labels:
           app: "busybox"
       spec:
