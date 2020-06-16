@@ -263,7 +263,7 @@ func (r *ReconcileDeployMysql) deploymentForMysql(m *mysqlv1alpha1.DeployMysql) 
                                 },
 
 					},
-			Volumes: []corev1.Volume{{Name: "mysql-data", VolumeSource: corev1.VolumeSource{PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{ClaimName:   cr.Spec.PersistentVolumeClaim.Name,},	},}},
+			Volumes: []corev1.Volume{{Name: "mysql-data", VolumeSource: corev1.VolumeSource{PersistentVolumeClaim: &corev1.PersistentVolumeClaimVolumeSource{ClaimName:   m.Spec.PersistentVolumeClaim.Name,},	},}},
 					
 				},
 			},
