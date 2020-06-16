@@ -251,7 +251,12 @@ func (r *ReconcileDeployMysql) deploymentForMysql(m *mysqlv1alpha1.DeployMysql) 
                                                         Name:          "mysql",
                                                 }},
                                         Env: []corev1.EnvVar{
-                                                {Name: "MDATA", Value: "/var/lib/mysql/data/mdata"},
+                                                {Name: "MDATA", Value: "/var/lib/mysql/data/mdata"}, 
+						{Name: "MYSQL_DATABASE", ValueFrom: &corev1.EnvVarSource{
+                        ConfigMapKeyRef: &corev1.ConfigMapKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "cm"}, Key: "MYSQL_DATABASE"}},},
+						{Name: "MYSQL_USER", ValueFrom: &corev1.EnvVarSource{
+                        ConfigMapKeyRef: &corev1.ConfigMapKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "cm"}, Key: "MYSQL_USER"}},},
+						
                                                 {Name: "MYSQL_PASSWORD", ValueFrom: &corev1.EnvVarSource{
                         ConfigMapKeyRef: &corev1.ConfigMapKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "cm"}, Key: "MYSQL_PASSWORD"}},},
                                         //      {Name: "DB_PASSWORD",ValueFrom: &corev1.EnvVarSource{SecretKeyRef: &corev1.SecretKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "mongodb"}, Key: "mongodb-root-password"}},},
