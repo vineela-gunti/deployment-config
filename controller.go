@@ -251,7 +251,7 @@ func (r *ReconcileDeployMysql) deploymentForMysql(m *mysqlv1alpha1.DeployMysql) 
                                                         Name:          "mysql",
                                                 }},
                                         Env: []corev1.EnvVar{
-                                                {Name: "MDATA", Value: "/var/lib/mysql/data/mdata"}, 
+                                                {Name: "MDATA", Value: "/var/lib/mysqldata/data/mdata"}, 
 						{Name: "MYSQL_DATABASE", ValueFrom: &corev1.EnvVarSource{
                         ConfigMapKeyRef: &corev1.ConfigMapKeySelector{LocalObjectReference: corev1.LocalObjectReference{Name: "cm"}, Key: "MYSQL_DATABASE"}},},
 						{Name: "MYSQL_USER", ValueFrom: &corev1.EnvVarSource{
@@ -264,7 +264,7 @@ func (r *ReconcileDeployMysql) deploymentForMysql(m *mysqlv1alpha1.DeployMysql) 
                                                 },
                                         VolumeMounts: []corev1.VolumeMount{{
                                                 Name:      "mysql-data",
-                                                MountPath: "/var/lib/mysql/data",
+                                                MountPath: "/var/lib/mysqldata/data",
                                                 }},
                                 },
 
