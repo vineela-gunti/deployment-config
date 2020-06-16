@@ -1,0 +1,17 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: mysql-pv-vol
+  namespace: mysql-go
+  labels:
+    type: local
+    app: example-deploymysql
+spec:
+  storageClassName: default
+  capacity:
+     storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  hostPath:
+    path: "/mnt/data"
