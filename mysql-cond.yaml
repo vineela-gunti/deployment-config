@@ -78,7 +78,7 @@
               envFrom:
                 - configMapRef:
                     name: mysql-cm
-               volumeMounts:
+              volumeMounts:
               - name: mysql-data
                 mountPath: "/var/lib/mysqldata/data"          
                     
