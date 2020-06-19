@@ -1,5 +1,5 @@
 ---
-- name: MySql Deployment
+- name: MySql Deployment taking data from secret
   k8s:
     definition:
       kind: StatefulSet
@@ -52,7 +52,7 @@
                 claimName: mysql-pvc-vol
   when: '{{envtype}}' == "secret"
   
-- name: MySql Deployment
+- name: MySql Deployment taking data from configmap
   k8s:
     definition:
       kind: StatefulSet
