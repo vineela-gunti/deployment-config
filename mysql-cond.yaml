@@ -1,0 +1,108 @@
+---
+- name: MySql Deployment
+  k8s:
+    definition:
+      kind: StatefulSet
+      apiVersion: apps/v1
+      metadata:
+        name: mysql
+        namespace: '{{ meta.namespace }}'
+      spec:
+        replicas: "{{size}}"
+        selector:
+          matchLabels:
+            app: mysql
+        template:
+          metadata:
+            labels:
+              app: mysql
+          spec:
+            containers:
+            - name: mysql
+              image: "{{image}}"
+              ports:
+              - containerPort: 3306
+              env:
+                - name: MYSQL_DATABASE
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-secret
+                      key: MYSQL_DATABASE
+                - name: MYSQL_USER
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-secret
+                      key: MYSQL_USER
+                - name: MYSQL_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-secret
+                      key: MYSQL_PASSWORD 
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: mysql-secret
+              volumeMounts:
+              - name: mysql-data
+                mountPath: "/var/lib/mysqldata/data"   
+              
+            volumes:
+            - name: mysql-data
+              persistentVolumeClaim:
+                claimName: mysql-pvc-vol
+  when: '{{envtype}}' == "secret"
+  
+- name: MySql Deployment
+  k8s:
+    definition:
+      kind: StatefulSet
+      apiVersion: apps/v1
+      metadata:
+        name: mysql
+        namespace: '{{ meta.namespace }}'
+      spec:
+        replicas: "{{size}}"
+        selector:
+          matchLabels:
+            app: mysql
+        template:
+          metadata:
+            labels:
+              app: mysql
+          spec:
+            containers:
+            - name: mysql
+              image: "{{image}}"
+              ports:
+              - containerPort: 3306
+              envFrom:
+                - configMapRef:
+                    name: mysql-cm
+               volumeMounts:
+              - name: mysql-data
+                mountPath: "/var/lib/mysqldata/data"          
+                    
+            volumes:
+            - name: mysql-data
+              persistentVolumeClaim:
+                claimName: mysql-pvc-vol
+  when: '{{envtype}}' == "configmap"
+  
+- name: Create the  service
+  k8s:
+    definition:
+      apiVersion: v1
+      kind: Service
+      metadata:
+        name: mysql-service
+        namespace: '{{ meta.namespace }}'
+        labels:
+          app: mysql
+      spec:
+        ports:
+        - name: database
+          port: 3306
+          protocol: TCP
+          targetPort: 3306
+        selector:
+          app: mysql
