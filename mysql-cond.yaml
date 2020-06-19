@@ -42,6 +42,7 @@
                   valueFrom:
                     secretKeyRef:
                       name: mysql-secret
+                      key: MYSQL_ROOT_PASSWORD
               volumeMounts:
               - name: mysql-data
                 mountPath: "/var/lib/mysqldata/data"   
