@@ -50,7 +50,7 @@
             - name: mysql-data
               persistentVolumeClaim:
                 claimName: mysql-pvc-vol
-  when: "{{envtype}}" == "secret"
+  when: envtype == "secret"
   
 - name: MySql Deployment taking data from configmap
   k8s:
@@ -86,7 +86,7 @@
             - name: mysql-data
               persistentVolumeClaim:
                 claimName: mysql-pvc-vol
-  when: "{{envtype}}" == "configmap"
+  when: envtype == "configmap"
   
 - name: Create the  service
   k8s:
